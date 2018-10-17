@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "498585130602",
+    "firebase_url": "https://mi-tienda-bd117.firebaseio.com",
+    "project_id": "mi-tienda-bd117",
+    "storage_bucket": "mi-tienda-bd117.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:498585130602:android:1ecf4747e4b14703",
+        "android_client_info": {
+          "package_name": "apus.developers.mitienda"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "498585130602-7l22njqcksi5s9quvvjj26o28qdlnreo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKDssoUT683Nxv-PlRmedtUOlJzHaOV2c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
