@@ -31,7 +31,7 @@ class ProductRow(val product: Product, val action: Int?, val fragment: SupplyFra
             }
         }
 
-        viewHolder.itemView.detail_textview_latest_message.text = String.format("$ %s", price)
+        viewHolder.itemView.detail_textview_latest_message.text = String.format("Cod: %s - $ %s", product.code, price)
 
         viewHolder.itemView.minus_button.setOnClickListener {
             if(sale.amount > 0){
