@@ -19,7 +19,8 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
-        val TAG = "MainActivity";
+        val TAG = "MainActivity"
+        val environment = "environment/dev"//"environment/prod"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

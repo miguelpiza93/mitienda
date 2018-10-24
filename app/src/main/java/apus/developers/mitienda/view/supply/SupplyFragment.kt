@@ -1,6 +1,7 @@
 package apus.developers.mitienda.view.supply
 
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -11,9 +12,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import apus.developers.mitienda.R
+import apus.developers.mitienda.R.string.name
 import apus.developers.mitienda.model.Product
 import apus.developers.mitienda.model.Sale
+import apus.developers.mitienda.view.MainActivity
 import apus.developers.mitienda.view.home.HomeFragment
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -58,40 +62,13 @@ class SupplyFragment : Fragment() {
         add_more_product_button.setOnClickListener { view ->
             when (action){
                 1 -> {
-                    Log.d(TAG, "Actualizar cantidades y registrar venta")
-                    var addToCash = 0L
-                    carSale.keys.forEach { codeProduct ->
-                        val productRef = FirebaseDatabase.getInstance().getReference("/products/$codeProduct")
-                        val product = products.get(codeProduct)
-                        val sale = carSale.get(codeProduct)
-                        product!!.amount = product.amount.minus(sale!!.amount)
-                        addToCash += product.sale_price * sale.amount
-                        productRef.setValue(product)
-                            .addOnSuccessListener { item ->
-                                Log.d(TAG, "Amount updated for product: ${productRef.key}")
-                                sale.timestamp = System.currentTimeMillis()
-                                sale.price = product.sale_price
-                                val day = DateFormat.format("yyyy/MM/dd", sale.timestamp);
-                                val saleRef = FirebaseDatabase.getInstance().getReference("/sales/$day/${sale.timestamp}")
-                                saleRef.setValue(sale)
-                                    .addOnSuccessListener {
-                                        Log.d(TAG, "new sale registered: ${saleRef.key}")
-                                        Snackbar.make(view, getString(R.string.new_sale_ok),
-                                                Snackbar.LENGTH_LONG).show()
-                                    }
-                            }
-                    }
-                    carSale.clear()
-                    addToCash += HomeFragment.CASH
-                    val cashRef = FirebaseDatabase.getInstance().getReference("/cash")
-                    cashRef.setValue(addToCash)
+                    confirmSale()
                 }
                 else -> {
                     val intent = Intent(context, AddProductActivity::class.java)
                     startActivity(intent)
                 }
             }
-
         }
 
         recyclerview_supplies.adapter = adapter
@@ -120,6 +97,62 @@ class SupplyFragment : Fragment() {
         listenForProducts()
     }
 
+    private fun confirmSale() {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(getString(R.string.confirm_sale))
+
+        var total = 0
+        var text = ""
+        carSale.values.forEach {
+            text += "${it.nameProduct} x ${it.amount}\n"
+            val salePrice = products.get(it.codeProduct)?.sale_price ?: 0
+            total = total.plus(it.amount.times(salePrice))
+        }
+        text += "\n${getString(R.string.sale_total)} $ ${total}"
+        // Display a message on alert dialog
+        builder.setMessage(text)
+
+        builder.setPositiveButton(getString(android.R.string.ok)){dialog, which ->
+            registerSale()
+        }
+
+        builder.setNeutralButton(getString(android.R.string.cancel)){_,_ ->
+            Toast.makeText(context,getString(R.string.cancel_sale), Toast.LENGTH_SHORT).show()
+        }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
+    private fun registerSale(){
+        var addToCash = 0L
+        carSale.keys.forEach { codeProduct ->
+            val productRef = FirebaseDatabase.getInstance().getReference("${MainActivity.environment}/products/$codeProduct")
+            val product = products.get(codeProduct)
+            val sale = carSale.get(codeProduct)
+            product!!.amount = product.amount.minus(sale!!.amount)
+            addToCash += product.sale_price * sale.amount
+            productRef.setValue(product)
+                    .addOnSuccessListener { item ->
+                        Log.d(TAG, "Amount updated for product: ${productRef.key}")
+                        sale.timestamp = System.currentTimeMillis()
+                        sale.price = product.sale_price
+                        val day = DateFormat.format("yyyy/MM/dd", sale.timestamp);
+                        val saleRef = FirebaseDatabase.getInstance().getReference("${MainActivity.environment}/sales/$day/${sale.timestamp}")
+                        saleRef.setValue(sale)
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "new sale registered: ${saleRef.key}")
+                                    Snackbar.make(add_more_product_button, getString(R.string.new_sale_ok),
+                                            Snackbar.LENGTH_LONG).show()
+                                }
+                    }
+        }
+        carSale.clear()
+        addToCash += HomeFragment.CASH
+        val cashRef = FirebaseDatabase.getInstance().getReference("${MainActivity.environment}/cash")
+        cashRef.setValue(addToCash)
+    }
+
     fun addToSaleCar(sale: Sale){
         if(sale.amount == 0){
             carSale.remove(sale.codeProduct)
@@ -130,7 +163,7 @@ class SupplyFragment : Fragment() {
     }
 
     private fun listenForProducts() {
-        val ref = FirebaseDatabase.getInstance().getReference("/products")
+        val ref = FirebaseDatabase.getInstance().getReference("${MainActivity.environment}/products")
         ref.addChildEventListener(object : ChildEventListener {
 
             override fun onChildChanged(p0: DataSnapshot, p1: String?) {
@@ -156,8 +189,8 @@ class SupplyFragment : Fragment() {
 
     private fun refreshRecyclerView() {
         adapter.clear()
-        products.values.forEach {
-            adapter.add(ProductRow(it, action, this))
+        products.values.sortedWith(compareBy { prod -> prod.name.toUpperCase() }).forEach {
+            adapter.add(ProductRow(it, this, this))
         }
     }
 

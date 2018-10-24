@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import apus.developers.mitienda.model.Product
 import apus.developers.mitienda.model.Sale
+import apus.developers.mitienda.view.MainActivity
 import apus.developers.mitienda.view.supply.ProductRow
 import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
@@ -109,7 +110,7 @@ class SaleFragment : Fragment(), AdapterView.OnItemSelectedListener{
     }
 
     private fun listenForSales(query: String) {
-        val ref = FirebaseDatabase.getInstance().getReference("/sales/$query")
+        val ref = FirebaseDatabase.getInstance().getReference("${MainActivity.environment}/sales/$query")
         ref.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }

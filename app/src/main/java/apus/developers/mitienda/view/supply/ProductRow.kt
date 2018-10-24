@@ -8,7 +8,7 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.product_row.view.*
 
-class ProductRow(val product: Product, val action: Int?, val fragment: SupplyFragment): Item<ViewHolder>() {
+class ProductRow(val product: Product, val parent: SupplyFragment, val fragment: SupplyFragment): Item<ViewHolder>() {
     val sale = Sale();
     override fun getLayout(): Int {
         return R.layout.product_row
@@ -17,10 +17,11 @@ class ProductRow(val product: Product, val action: Int?, val fragment: SupplyFra
     override fun bind(viewHolder: ViewHolder, position: Int) {
         sale.codeProduct = product.code
         sale.nameProduct = product.name
-        viewHolder.itemView.amount_sale_text.setText(fragment.getString(R.string.zero))
+        val saleCount = parent.carSale.get(product.code)?.amount ?: 0
+        viewHolder.itemView.amount_sale_text.setText(saleCount.toString())
         viewHolder.itemView.name_textview_product.text = String.format("%s x %s", product.name, product.amount.toString())
         var price = ""
-        when (action){
+        when (parent.action){
             1 -> {
                 viewHolder.itemView.actions_layout.visibility = View.VISIBLE
                 price = product.sale_price.toString()

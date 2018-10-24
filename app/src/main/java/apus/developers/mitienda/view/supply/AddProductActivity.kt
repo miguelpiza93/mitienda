@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import apus.developers.mitienda.R
 import apus.developers.mitienda.model.Product
+import apus.developers.mitienda.view.MainActivity
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_add_product.*
@@ -37,7 +38,7 @@ class AddProductActivity : AppCompatActivity(), View.OnClickListener {
 
     fun addProduct(product: Product){
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(this@AddProductActivity) { instanceIdResult ->
-            val productsRef = FirebaseDatabase.getInstance().getReference("/products/${product.code}")
+            val productsRef = FirebaseDatabase.getInstance().getReference("${MainActivity.environment}/products/${product.code}")
             productsRef.setValue(product).addOnSuccessListener {
                 Log.d(TAG, "Saved out product")
                 code_product_input.text.clear()

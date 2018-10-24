@@ -15,7 +15,6 @@
     <string name="in_cash">En caja: $ %s</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
-    <string name="zero">0</string>
     <string name="new_sale_ok">Venta registrada!</string>
     <string name="valor_total">Valor total</string>
     <string name="code">Código</string>
@@ -24,6 +23,9 @@
     <string name="precio_por_unidad">Costo por unidad</string>
     <string name="add">Agregar</string>
     <string name="precio_de_venta">Precio de venta</string>
+    <string name="confirm_sale">¿Desea registrar la venta?</string>
+    <string name="sale_total">Total venta</string>
+    <string name="cancel_sale">Se ha cancelado la venta</string>
 
     <array name="spinner_list_item_array">
         <item>Día</item>

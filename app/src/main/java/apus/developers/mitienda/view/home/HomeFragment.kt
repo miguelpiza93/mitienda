@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import apus.developers.mitienda.R
 import apus.developers.mitienda.model.Product
+import apus.developers.mitienda.view.MainActivity
 import apus.developers.mitienda.view.supply.SupplyFragment
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -54,7 +55,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun listenForCash() {
-        val ref = FirebaseDatabase.getInstance().getReference("/cash")
+        val ref = FirebaseDatabase.getInstance().getReference("${MainActivity.environment}/cash")
         ref.addValueEventListener(object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError) {
             }
