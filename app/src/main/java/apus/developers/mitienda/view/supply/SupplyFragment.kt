@@ -62,7 +62,12 @@ class SupplyFragment : Fragment() {
         add_more_product_button.setOnClickListener { view ->
             when (action){
                 1 -> {
-                    confirmSale()
+                    if(!carSale.isEmpty()){
+                        confirmSale()
+                    }
+                    else {
+                        Toast.makeText(context,getString(R.string.empty_sale), Toast.LENGTH_SHORT).show()
+                    }
                 }
                 else -> {
                     val intent = Intent(context, AddProductActivity::class.java)

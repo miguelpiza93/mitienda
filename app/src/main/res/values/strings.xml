@@ -26,6 +26,7 @@
     <string name="confirm_sale">¿Desea registrar la venta?</string>
     <string name="sale_total">Total venta</string>
     <string name="cancel_sale">Se ha cancelado la venta</string>
+    <string name="empty_sale">Debe escoger al menos un producto</string>
 
     <array name="spinner_list_item_array">
         <item>Día</item>
