@@ -20,7 +20,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     companion object {
         val TAG = "MainActivity"
-        val environment = "environment/dev"//"environment/prod"
+        val environment = "environment/dev"
+        //val environment = "environment/prod"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
