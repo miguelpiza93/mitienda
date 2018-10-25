@@ -22,6 +22,7 @@
     <string name="amount">Cantidad</string>
     <string name="precio_por_unidad">Costo por unidad</string>
     <string name="add">Agregar</string>
+    <string name="edit">Editar</string>
     <string name="precio_de_venta">Precio de venta</string>
     <string name="confirm_sale">¿Desea registrar la venta?</string>
     <string name="sale_total">Total venta</string>

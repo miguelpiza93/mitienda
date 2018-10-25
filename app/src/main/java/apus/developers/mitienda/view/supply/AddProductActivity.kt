@@ -2,6 +2,7 @@ package apus.developers.mitienda.view.supply
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -16,6 +17,7 @@ class AddProductActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
         val TAG = "AddProductActivity"
+        val PRODUCT_KEY = "PRODUCT"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +25,16 @@ class AddProductActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_add_product)
 
         add_product_add_button.setOnClickListener(this)
+        val product = getIntent().extras.getParcelable<Product>(PRODUCT_KEY)
+        if(!product.code.isBlank()){
+            code_product_input.setText(product.code)
+            code_product_input.isEnabled = false
+            name_product_input.setText(product.name)
+            amount_product_input.setText(product.amount.toString())
+            cost_product_input.setText(product.cost.times(product.amount).toString())
+            sale_price_input.setText(product.sale_price.toString())
+            add_product_add_button.text = getString(R.string.edit)
+        }
     }
 
     override fun onClick(v: View?) {
@@ -45,6 +57,7 @@ class AddProductActivity : AppCompatActivity(), View.OnClickListener {
                 name_product_input.text.clear()
                 amount_product_input.text.clear()
                 cost_product_input.text.clear()
+                sale_price_input.text.clear()
             }
         }
     }

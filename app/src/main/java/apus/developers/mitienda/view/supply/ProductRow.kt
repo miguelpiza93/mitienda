@@ -23,12 +23,14 @@ class ProductRow(val product: Product, val parent: SupplyFragment, val fragment:
         var price = ""
         when (parent.action){
             1 -> {
+                //Venta
                 viewHolder.itemView.actions_layout.visibility = View.VISIBLE
                 price = product.sale_price.toString()
             }
             2 -> {
+                //Almacén
                 viewHolder.itemView.actions_layout.visibility = View.GONE
-                price = product.cost.toString()
+                price = Math.round(product.cost).toString()
             }
         }
 

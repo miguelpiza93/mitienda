@@ -71,6 +71,7 @@ class SupplyFragment : Fragment() {
                 }
                 else -> {
                     val intent = Intent(context, AddProductActivity::class.java)
+                    intent.putExtra(AddProductActivity.PRODUCT_KEY, Product())
                     startActivity(intent)
                 }
             }
@@ -79,27 +80,33 @@ class SupplyFragment : Fragment() {
         recyclerview_supplies.adapter = adapter
         recyclerview_supplies.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        adapter.setOnItemClickListener { item, view ->
-            Log.d(TAG, "Open product detail")
-            //val intent = Intent(context, ChatLogActivity::class.java)
-            //val row = item as LatestMessageRow
-            //intent.putExtra(NewMessageActivity.USER_KEY, row.chatPartnerUser)
-            //startActivity(intent)
-        }
+
 
         var title = getString(R.string.store)
 
         when (action){
             1 -> {
                 title = getString(R.string.new_sale)
+                add_more_product_button.setImageResource(R.drawable.sell)
             }
             2 -> {
                 title = getString(R.string.new_supply)
+                add_more_product_button.setImageResource(R.drawable.add)
+                setupAdapterListener()
             }
         }
 
         activity!!.title = title
         listenForProducts()
+    }
+
+    private fun setupAdapterListener() {
+        adapter.setOnItemClickListener { item, view ->
+            val row = item as ProductRow
+            val intent = Intent(context, AddProductActivity::class.java)
+            intent.putExtra(AddProductActivity.PRODUCT_KEY, row.product)
+            startActivity(intent)
+        }
     }
 
     private fun confirmSale() {
