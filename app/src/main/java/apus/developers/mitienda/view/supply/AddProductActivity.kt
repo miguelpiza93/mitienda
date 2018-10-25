@@ -1,11 +1,9 @@
 package apus.developers.mitienda.view.supply
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Parcelable
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import apus.developers.mitienda.R
 import apus.developers.mitienda.model.Product
 import apus.developers.mitienda.view.MainActivity
@@ -16,8 +14,8 @@ import kotlinx.android.synthetic.main.activity_add_product.*
 class AddProductActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
-        val TAG = "AddProductActivity"
-        val PRODUCT_KEY = "PRODUCT"
+        const val TAG = "AddProductActivity"
+        const val PRODUCT_KEY = "PRODUCT"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +23,7 @@ class AddProductActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_add_product)
 
         add_product_add_button.setOnClickListener(this)
-        val product = getIntent().extras.getParcelable<Product>(PRODUCT_KEY)
+        val product = intent.extras.getParcelable<Product>(PRODUCT_KEY)
         if(!product.code.isBlank()){
             code_product_input.setText(product.code)
             code_product_input.isEnabled = false
@@ -48,7 +46,7 @@ class AddProductActivity : AppCompatActivity(), View.OnClickListener {
         addProduct(product)
     }
 
-    fun addProduct(product: Product){
+    private fun addProduct(product: Product){
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener(this@AddProductActivity) { instanceIdResult ->
             val productsRef = FirebaseDatabase.getInstance().getReference("${MainActivity.environment}/products/${product.code}")
             productsRef.setValue(product).addOnSuccessListener {

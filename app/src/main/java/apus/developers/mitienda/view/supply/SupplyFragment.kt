@@ -3,9 +3,11 @@ package apus.developers.mitienda.view.supply
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DividerItemDecoration
 import android.text.format.DateFormat
 import android.util.Log
@@ -14,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import apus.developers.mitienda.R
-import apus.developers.mitienda.R.string.name
 import apus.developers.mitienda.model.Product
 import apus.developers.mitienda.model.Sale
 import apus.developers.mitienda.view.MainActivity
@@ -44,7 +45,7 @@ class SupplyFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    val adapter = GroupAdapter<ViewHolder>()
+    private val adapter = GroupAdapter<ViewHolder>()
     val products = HashMap<String,Product>()
     val carSale = HashMap<String,Sale>()
     var action: Int? = -1
@@ -87,7 +88,9 @@ class SupplyFragment : Fragment() {
         when (action){
             1 -> {
                 title = getString(R.string.new_sale)
-                add_more_product_button.setImageResource(R.drawable.sell)
+                add_more_product_button.setImageResource(R.drawable.send)
+                add_more_product_button
+                add_more_product_button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!, R.color.colorPrimary))
             }
             2 -> {
                 title = getString(R.string.new_supply)
@@ -117,10 +120,10 @@ class SupplyFragment : Fragment() {
         var text = ""
         carSale.values.forEach {
             text += "${it.nameProduct} x ${it.amount}\n"
-            val salePrice = products.get(it.codeProduct)?.sale_price ?: 0
+            val salePrice = products[it.codeProduct]?.sale_price ?: 0
             total = total.plus(it.amount.times(salePrice))
         }
-        text += "\n${getString(R.string.sale_total)} $ ${total}"
+        text += "\n${getString(R.string.sale_total)} $ $total"
         // Display a message on alert dialog
         builder.setMessage(text)
 
@@ -140,8 +143,8 @@ class SupplyFragment : Fragment() {
         var addToCash = 0L
         carSale.keys.forEach { codeProduct ->
             val productRef = FirebaseDatabase.getInstance().getReference("${MainActivity.environment}/products/$codeProduct")
-            val product = products.get(codeProduct)
-            val sale = carSale.get(codeProduct)
+            val product = products[codeProduct]
+            val sale = carSale[codeProduct]
             product!!.amount = product.amount.minus(sale!!.amount)
             addToCash += product.sale_price * sale.amount
             productRef.setValue(product)
@@ -149,7 +152,7 @@ class SupplyFragment : Fragment() {
                         Log.d(TAG, "Amount updated for product: ${productRef.key}")
                         sale.timestamp = System.currentTimeMillis()
                         sale.price = product.sale_price
-                        val day = DateFormat.format("yyyy/MM/dd", sale.timestamp);
+                        val day = DateFormat.format("yyyy/MM/dd", sale.timestamp)
                         val saleRef = FirebaseDatabase.getInstance().getReference("${MainActivity.environment}/sales/$day/${sale.timestamp}")
                         saleRef.setValue(sale)
                                 .addOnSuccessListener {
@@ -170,7 +173,7 @@ class SupplyFragment : Fragment() {
             carSale.remove(sale.codeProduct)
         }
         else{
-            carSale.put(sale.codeProduct, sale)
+            carSale[sale.codeProduct] = sale
         }
     }
 
@@ -215,7 +218,7 @@ class SupplyFragment : Fragment() {
 
     companion object {
 
-        val TAG = "SupplyFragment"
+        const val TAG = "SupplyFragment"
 
         /**
          * Use this factory method to create a new instance of

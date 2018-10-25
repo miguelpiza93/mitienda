@@ -2,8 +2,6 @@
     <string name="app_name">Mi Tienda</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -20,7 +18,6 @@
     <string name="code">Código</string>
     <string name="name">Nombre</string>
     <string name="amount">Cantidad</string>
-    <string name="precio_por_unidad">Costo por unidad</string>
     <string name="add">Agregar</string>
     <string name="edit">Editar</string>
     <string name="precio_de_venta">Precio de venta</string>

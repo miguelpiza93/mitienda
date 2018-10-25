@@ -8,8 +8,8 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.product_row.view.*
 
-class ProductRow(val product: Product, val parent: SupplyFragment, val fragment: SupplyFragment): Item<ViewHolder>() {
-    val sale = Sale();
+class ProductRow(val product: Product, val parent: SupplyFragment, private val fragment: SupplyFragment): Item<ViewHolder>() {
+    private val sale = Sale()
     override fun getLayout(): Int {
         return R.layout.product_row
     }
@@ -17,7 +17,7 @@ class ProductRow(val product: Product, val parent: SupplyFragment, val fragment:
     override fun bind(viewHolder: ViewHolder, position: Int) {
         sale.codeProduct = product.code
         sale.nameProduct = product.name
-        val saleCount = parent.carSale.get(product.code)?.amount ?: 0
+        val saleCount = parent.carSale[product.code]?.amount ?: 0
         viewHolder.itemView.amount_sale_text.setText(saleCount.toString())
         viewHolder.itemView.name_textview_product.text = String.format("%s x %s", product.name, product.amount.toString())
         var price = ""
@@ -38,14 +38,14 @@ class ProductRow(val product: Product, val parent: SupplyFragment, val fragment:
 
         viewHolder.itemView.minus_button.setOnClickListener {
             if(sale.amount > 0){
-                sale.amount--;
+                sale.amount--
                 viewHolder.itemView.amount_sale_text.setText(sale.amount.toString())
                 fragment.addToSaleCar(sale)
             }
         }
         viewHolder.itemView.plus_button.setOnClickListener {
             if(sale.amount < product.amount){
-                sale.amount++;
+                sale.amount++
                 viewHolder.itemView.amount_sale_text.setText(sale.amount.toString())
                 fragment.addToSaleCar(sale)
             }

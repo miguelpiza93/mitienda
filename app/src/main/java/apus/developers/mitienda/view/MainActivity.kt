@@ -1,14 +1,15 @@
 package apus.developers.mitienda.view
 
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
+import android.util.Log
 import android.view.MenuItem
+import android.widget.TextView
 import apus.developers.mitienda.R
 import apus.developers.mitienda.view.home.HomeFragment
 import apus.developers.mitienda.view.sale.SaleFragment
@@ -16,11 +17,12 @@ import apus.developers.mitienda.view.supply.SupplyFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
+
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
-        val TAG = "MainActivity"
-        val environment = "environment/dev"
+        const val TAG = "MainActivity"
+        const val environment = "environment/dev"
         //val environment = "environment/prod"
     }
 
@@ -37,6 +39,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
         nav_view.setCheckedItem(R.id.nav_camera)
         changeFragment(HomeFragment.newInstance("", ""))
+        try {
+            val pInfo = this.packageManager.getPackageInfo(packageName, 0)
+            val header = nav_view.getHeaderView(0)
+            val text: TextView = header.findViewById(R.id.version_name_menu)
+            text.text = pInfo.versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            Log.e(TAG, e.message, e)
+        }
+
     }
 
     override fun onBackPressed() {
@@ -73,16 +84,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if(fragmentTransaction) {
             changeFragment(fragment)
 
-            item.setChecked(true)
-            getSupportActionBar()?.setTitle(item.getTitle())
+            item.isChecked = true
+            supportActionBar?.title = item.title
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    fun changeFragment(fragment: Fragment?){
-        getSupportFragmentManager().beginTransaction()
+    private fun changeFragment(fragment: Fragment?){
+        supportFragmentManager.beginTransaction()
                 .replace(R.id.frameLayout, fragment)
                 .commit()
     }

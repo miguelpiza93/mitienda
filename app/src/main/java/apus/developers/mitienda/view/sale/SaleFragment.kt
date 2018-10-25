@@ -1,32 +1,24 @@
 package apus.developers.mitienda.view.sale
 
 
-import android.content.res.Resources
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.view.*
-import apus.developers.mitienda.R
 import android.support.v7.widget.DividerItemDecoration
 import android.text.format.DateFormat
-import android.util.Log
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import apus.developers.mitienda.model.Product
+import apus.developers.mitienda.R
 import apus.developers.mitienda.model.Sale
 import apus.developers.mitienda.view.MainActivity
-import apus.developers.mitienda.view.supply.ProductRow
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.fragment_sale.*
-import kotlinx.android.synthetic.main.fragment_supply.*
-import kotlinx.android.synthetic.main.notification_template_lines_media.view.*
-import java.nio.file.Files.size
-
-
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -46,13 +38,13 @@ class SaleFragment : Fragment(), AdapterView.OnItemSelectedListener{
     private var param1: String? = null
     private var param2: String? = null
 
-    val adapter = GroupAdapter<ViewHolder>()
+    private val adapter = GroupAdapter<ViewHolder>()
     val sales = ArrayList<Sale>()
-    var filter = 0
+    private var filter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -92,7 +84,7 @@ class SaleFragment : Fragment(), AdapterView.OnItemSelectedListener{
         inflater.inflate(R.menu.main, menu)
 
         val item = menu.findItem(R.id.spinner)
-        val spinner = item.getActionView() as Spinner
+        val spinner = item.actionView as Spinner
 
         spinner.onItemSelectedListener = this
         val adapter = ArrayAdapter.createFromResource(context,

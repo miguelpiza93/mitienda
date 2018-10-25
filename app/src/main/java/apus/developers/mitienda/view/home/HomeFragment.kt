@@ -2,17 +2,17 @@ package apus.developers.mitienda.view.home
 
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.text.TextUtils.replace
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import apus.developers.mitienda.R
-import apus.developers.mitienda.model.Product
 import apus.developers.mitienda.view.MainActivity
 import apus.developers.mitienda.view.supply.SupplyFragment
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
                     .setAction("Action", null).show()*/
             val fragment = SupplyFragment.newInstance("", "")
             fragment.action = 1
-            activity!!.getSupportFragmentManager().beginTransaction()
+            activity!!.supportFragmentManager.beginTransaction()
                     .replace(R.id.frameLayout, fragment)
                     .commit()
         }
