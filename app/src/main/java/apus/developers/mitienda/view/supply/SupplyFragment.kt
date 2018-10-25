@@ -89,7 +89,6 @@ class SupplyFragment : Fragment() {
             1 -> {
                 title = getString(R.string.new_sale)
                 add_more_product_button.setImageResource(R.drawable.send)
-                add_more_product_button
                 add_more_product_button.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context!!, R.color.colorPrimary))
             }
             2 -> {
